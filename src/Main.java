@@ -8,7 +8,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         Game.login();
         while (true) {
-            int answer = scanner.nextInt();
+            String answer = scanner.nextLine();
             Game.dialog(answer);
         }
     }

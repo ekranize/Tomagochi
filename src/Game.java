@@ -1,32 +1,47 @@
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class Game {
     private static String whereIAm; //Текущее положение в диалоге
-    private static HashMap<Integer, String> choiceHashMap = new HashMap<>(); //Map выбора пункта меню - номер и название
+    private static HashMap<String, String> choiceHashMap = new HashMap<>(); //Map выбора пункта меню - номер и название
     private static ArrayList<String> users = new ArrayList<>(); //список всех пользователей
-    private static ArrayList<String> pets = new ArrayList<>(); //список всех питомцев
+    private static ArrayList<String> pets = new ArrayList<>(); //список всех питомцев текущего пользователя
+    private static String currentUser; //Текущий пользователь
+    private static String currentPet; //Текущий питомец
     //Метод обрабатывает очередной выбор в диалоге
-    public static void dialog(int choice) {
+    public static void dialog(String choice) {
         switch (whereIAm) {
             case "login" -> {
                 switch (choice) {
-                    case 1 -> choosePlayer();
+                    case "1" -> choosePlayer();
                     //case 2 -> createPlayer();
-                    case 3 -> System.exit(0);
+                    case "3" -> System.exit(0);
                 }
             }
             case "choosePlayer" -> {
+                currentUser = choiceHashMap.get(choice);
                 switch (choice) {
-                    case 0 -> login();
-                    default -> choosePet(choiceHashMap.get(choice));
+                    case "0" -> login();
+                    default -> userMenu();
+                }
+            }
+            case "userMenu" -> {
+                switch (choice) {
+                    case "0" -> choosePlayer();
+                    case "1" -> choosePet();
+                    //case "2" -> createPet();
+                    //case "3" -> checkBalance();
+                    //case "4" -> showInventory();
+                    //case "5" -> shopMenu();
                 }
             }
             case "choosePet" -> {
+                currentPet = choiceHashMap.get(choice);
                 switch (choice) {
-                    case 0 -> choosePlayer();
-                    //default -> choosePet(choiceHashMap.get(choice));
+                    case "0" -> userMenu();
+                    //default -> petMenu();
                 }
             }
         }
@@ -52,12 +67,13 @@ public class Game {
         if (!users.isEmpty()) {
             for (int i = 0; i < users.size(); i++) {
                 System.out.println(i + 1 + ") " + users.get(i));
-                choiceHashMap.put(i + 1, users.get(i));
+                choiceHashMap.put(Integer.toString(i + 1), users.get(i));
             }
+            System.out.println("0) Назад");
         } else {
-            System.out.println("В БД отсутствуют записи о пользователях");
+            System.out.println("ОШИБКА! В БД отсутствуют записи о пользователях");
             try {
-                Thread.sleep(3000);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 System.out.println("Что-то пошло не так, возникла ошибка!");
                 e.printStackTrace();
@@ -65,11 +81,23 @@ public class Game {
             login();
         }
     }
-    private static void choosePet (String userName) {
+    //Метод вывода меню пользователя
+    //Метод первичного запуска авторизации
+    public static void userMenu() {
+        whereIAm = "userMenu";
+        System.out.println("Меню пользователя: " + currentUser);
+        System.out.println("1) Выбрать питомца");
+        System.out.println("2) Создать питомца");
+        System.out.println("3) Проверить баланс");
+        System.out.println("4) Проверить инвентарь");
+        System.out.println("5) Сходить в магазин");
+        System.out.println("0) Назад");
+    }
+    private static void choosePet () {
         whereIAm = "choosePet";
-        System.out.println("Выберите Вашего питомца:");
+        System.out.println("Выберите Вашего питомца, " + currentUser + ":");
         try {
-            pets = DBHandler.getPetList(userName);
+            pets = DBHandler.getPetList(currentUser);
         } catch (SQLException e) {
             System.out.println("Что-то пошло не так, возникла ошибка!");
             e.printStackTrace();
@@ -77,17 +105,18 @@ public class Game {
         if (!pets.isEmpty()) {
             for (int i = 0; i < pets.size(); i++) {
                 System.out.println(i + 1 + ") " + pets.get(i));
-                choiceHashMap.put(i + 1, pets.get(i));
+                choiceHashMap.put(Integer.toString(i + 1), pets.get(i));
             }
+            System.out.println("0) Назад");
         } else {
-            System.out.println("В БД отсутствуют записи о питомцах");
+            System.out.println("ОШИБКА! В БД отсутствуют записи о питомцах");
             try {
-                Thread.sleep(3000);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 System.out.println("Что-то пошло не так, возникла ошибка!");
                 e.printStackTrace();
             }
-            choosePlayer();
+            userMenu();
         }
     }
 }
