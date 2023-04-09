@@ -2,7 +2,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 //конфигуратор игры
-public class Config {
+public final class Config {
     private final int balanceIncrSpeed; //скорость увеличения баланса, сек./+1
     private final int startBalance; //стартовый баланс для нового игрока
     private final int eatDecrSpeed; //скорость уменьшения "сытости", сек./-1
@@ -17,11 +17,12 @@ public class Config {
     public Config () {
         HashMap<String, String> configMap = null;
         try {
-            DBHandler dbHandler = new DBHandler();
+            DBHandler.init();
             System.out.println("Подключение к БД... успешно");
-            configMap = dbHandler.getDBConfig();
+            configMap = DBHandler.getDBConfig();
             System.out.println("Загрузка конфигурации из БД... успешно");
         } catch (SQLException e) {
+            System.out.println("Что-то пошло не так, возникла ошибка!");
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
@@ -34,8 +35,6 @@ public class Config {
         this.washingIncrCount = Integer.parseInt(configMap.get("washingIncrCount"));
         this.playingIncrCount = Integer.parseInt(configMap.get("playingIncrCount"));
         this.maximumBalance = Integer.parseInt(configMap.get("maximumBalance"));
-
-        System.out.println(this.drinkDecrSpeed);
     }
 
     //Геттеры

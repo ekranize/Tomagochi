@@ -1,15 +1,17 @@
 import org.sqlite.JDBC;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public final class DBHandler {
     private static final String CON_STR = "jdbc:sqlite:db.db"; // Константа, в которой хранится адрес подключения
-    private Statement statement = null;
-    private ResultSet resultSet = null;
-    private final Connection connection; // Объект, в котором будет храниться соединение с БД
-    public DBHandler() throws SQLException {
+    private static Statement statement;
+    private static ResultSet resultSet;
+    private static Connection connection; // Объект, в котором будет храниться соединение с БД
+    public static void init() throws SQLException {
         DriverManager.registerDriver(new JDBC());  // Регистрируем драйвер, с которым будем работать (Sqlite)
-        this.connection = DriverManager.getConnection(CON_STR); // Выполняем подключение к базе данных
+        connection = DriverManager.getConnection(CON_STR); // Выполняем подключение к базе данных
+        statement = connection.createStatement();
     }
     /*public void connectionClose () throws SQLException {
         if (connection != null && !connection.isClosed()) {
@@ -32,9 +34,8 @@ public final class DBHandler {
         }
     }*/
     //Метод возвращает все настройки конфигурации из БД
-    public HashMap<String,String> getDBConfig () throws SQLException {
-        HashMap<String, String> configMap = new HashMap<String, String>();
-        statement = connection.createStatement();
+    public static HashMap<String,String> getDBConfig () throws SQLException {
+        HashMap<String, String> configMap = new HashMap<>();
         resultSet = statement.executeQuery("SELECT *, COUNT(*) AS recordCount FROM config");
         ResultSetMetaData meta = resultSet.getMetaData();
         if (resultSet.getInt("recordCount") > 0) {
@@ -45,6 +46,25 @@ public final class DBHandler {
             }
             return configMap;
         } else throw new SQLException("Запрос к БД вернул 0 строк");
+
+    }
+    //Метод возвращает список всех пользователей из таблицы users
+    public static ArrayList<String> getUserList()  throws SQLException {
+        ArrayList<String> userList = new ArrayList<>();
+        resultSet = statement.executeQuery("SELECT name FROM users");
+        while (resultSet.next()) {
+            userList.add(resultSet.getString("name"));
+        }
+        return userList;
+    }
+    //Метод возвращает список всех питомцев из таблицы pets, принадлежащих выбранному пользователю
+    public static ArrayList<String> getPetList(String userName)  throws SQLException {
+        ArrayList<String> petList = new ArrayList<>();
+        resultSet = statement.executeQuery("SELECT name FROM pets WHERE userName = '" + userName + "'");
+        while (resultSet.next()) {
+            petList.add(resultSet.getString("name"));
+        }
+        return petList;
     }
     /*public boolean checkAuth (String userName, String passwordHash) throws SQLException {
         statement = connection.createStatement();
