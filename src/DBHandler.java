@@ -87,6 +87,28 @@ public final class DBHandler {
         }
         return petList;
     }
+    //Метод возвращает список всех продуктов питания из таблицы shop
+    public static ArrayList<String> showEats()  throws SQLException {
+        ArrayList<String> eatList = new ArrayList<>();
+        resultSet = statement.executeQuery("SELECT object FROM shop WHERE type=\"eat\"");
+        while (resultSet.next()) {
+            eatList.add(resultSet.getString("object"));
+        }
+        return eatList;
+    }
+    //Метод возвращает список всех напитков из таблицы shop
+    public static ArrayList<String> showDrinks()  throws SQLException {
+        ArrayList<String> drinkList = new ArrayList<>();
+        resultSet = statement.executeQuery("SELECT object FROM shop WHERE type=\"drink\"");
+        while (resultSet.next()) {
+            drinkList.add(resultSet.getString("object"));
+        }
+        return drinkList;
+    }
+    //Метод создает нового питомца
+    public static boolean createPet (String newPetName, String newPetEat, String newPetDrink, String userName) throws SQLException {
+        return statement.executeUpdate("INSERT INTO pets (name, favEat, favDrink, userName) VALUES (\"" + newPetName + "\", \"" + newPetEat + "\", \"" + newPetDrink + "\", \"" + userName + "\")") == 1;
+    }
     /*public boolean checkAuth (String userName, String passwordHash) throws SQLException {
         statement = connection.createStatement();
         resultSet = statement.executeQuery("SELECT COUNT(*) AS recordCount FROM users WHERE userName = '" + userName + "' AND password = '" + passwordHash + "'");

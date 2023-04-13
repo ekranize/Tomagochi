@@ -9,8 +9,13 @@ public class Game {
     private static HashMap<String, String> choiceHashMap = new HashMap<>(); //Map выбора пункта меню - номер и название
     private static ArrayList<String> users = new ArrayList<>(); //список всех пользователей
     private static ArrayList<String> pets = new ArrayList<>(); //список всех питомцев текущего пользователя
+    private static ArrayList<String> eats = new ArrayList<>(); //список всех продуктов питания
+    private static ArrayList<String> drinks = new ArrayList<>(); //список всех напитков
     private static String currentUser; //Текущий пользователь
     private static String currentPet; //Текущий питомец
+    private static String newPetName; //Имя нового питомца
+    private static String newPetEat; //Любимая еда нового питомца
+    private static String newPetDrink; //Любимый напиток нового питомца
     //Метод обрабатывает очередной выбор в диалоге
     public static void dialog(String choice) {
         switch (whereIAm) {
@@ -38,7 +43,7 @@ public class Game {
                 switch (choice) {
                     case "0" -> choosePlayer();
                     case "1" -> choosePet();
-                    //case "2" -> createPet();
+                    case "2" -> createPet1();
                     case "3" -> checkBalance();
                     //case "4" -> showInventory();
                     //case "5" -> shopMenu();
@@ -49,6 +54,27 @@ public class Game {
                 switch (choice) {
                     case "0" -> userMenu();
                     //default -> petMenu();
+                }
+            }
+            case "createPet1" -> {
+                newPetName = choice;
+                switch (choice) {
+                    case "0" -> userMenu();
+                    default -> createPet2();
+                }
+            }
+            case "createPet2" -> {
+                newPetEat = choiceHashMap.get(choice);
+                switch (choice) {
+                    case "0" -> createPet1();
+                    default -> createPet3();
+                }
+            }
+            case "createPet3" -> {
+                newPetDrink = choiceHashMap.get(choice);
+                switch (choice) {
+                    case "0" -> createPet2();
+                    default -> createPet4();
                 }
             }
         }
@@ -153,6 +179,78 @@ public class Game {
             if (newBalance != -1) System.out.println("Баланс счета пользователя " + currentUser + " - " + newBalance);
             else System.out.println("Ошибка проверки баланса счета");
         } catch (SQLException | ParseException e) {
+            System.out.println("Что-то пошло не так, возникла ошибка!");
+            e.printStackTrace();
+        }
+        userMenu();
+    }
+    //Метод для запроса имени нового питомца
+    private static void createPet1() {
+        whereIAm = "createPet1";
+        System.out.println("Введите имя нового питомца или \"0\" для возврата:");
+    }
+    //Метод для выбора любимой еды нового питомца
+    private static void createPet2() {
+        whereIAm = "createPet2";
+        System.out.println("Выберите любимую еду нового питомца или \"0\" для возврата:");
+        try {
+            eats = DBHandler.showEats();
+        } catch (SQLException e) {
+            System.out.println("Что-то пошло не так, возникла ошибка!");
+            e.printStackTrace();
+        }
+        if (!eats.isEmpty()) {
+            for (int i = 0; i < eats.size(); i++) {
+                System.out.println(i + 1 + ") " + eats.get(i));
+                choiceHashMap.put(Integer.toString(i + 1), eats.get(i));
+            }
+            System.out.println("0) Назад");
+        } else {
+            System.out.println("ОШИБКА! В БД отсутствуют записи о еде");
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                System.out.println("Что-то пошло не так, возникла ошибка!");
+                e.printStackTrace();
+            }
+            createPet1();
+        }
+    }
+    //Метод для выбора любимого напитка нового питомца
+    private static void createPet3() {
+        whereIAm = "createPet3";
+        System.out.println("Выберите любимый напиток нового питомца или \"0\" для возврата:");
+        try {
+            drinks = DBHandler.showDrinks();
+        } catch (SQLException e) {
+            System.out.println("Что-то пошло не так, возникла ошибка!");
+            e.printStackTrace();
+        }
+        if (!drinks.isEmpty()) {
+            for (int i = 0; i < drinks.size(); i++) {
+                System.out.println(i + 1 + ") " + drinks.get(i));
+                choiceHashMap.put(Integer.toString(i + 1), drinks.get(i));
+            }
+            System.out.println("0) Назад");
+        } else {
+            System.out.println("ОШИБКА! В БД отсутствуют записи о напитках");
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                System.out.println("Что-то пошло не так, возникла ошибка!");
+                e.printStackTrace();
+            }
+            createPet2();
+        }
+    }
+    //Метод для собственно создания нового питомца
+    private static void createPet4() {
+        whereIAm = "createPet4";
+        try {
+            if (DBHandler.createPet(newPetName, newPetEat, newPetDrink, currentUser))
+                System.out.println("Питомец " + newPetName + " создан для пользователя " + currentUser + ".");
+            Thread.sleep(2000);
+        } catch (SQLException | InterruptedException e) {
             System.out.println("Что-то пошло не так, возникла ошибка!");
             e.printStackTrace();
         }

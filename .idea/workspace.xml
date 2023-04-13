@@ -4,10 +4,8 @@
     <list default="true" id="a3b8626f-c529-4df6-b50f-69e12791dcf3" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.db" beforeDir="false" afterPath="$PROJECT_DIR$/db.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Config.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DBHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DBHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -140,7 +138,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681397145158</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Класс Config теперь статический, &#10;поменял его конструктор на метод инициализации&#10;Добавил методы для проверки &#10;и обновления баланса пользователя">
+      <created>1681411411989</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1681411411989</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -150,6 +155,7 @@
     <MESSAGE value="Добавлен класс Game - обработчик выбора пунктов меню&#10;Начал разрабатывать дерево диалога - можно выбирать существующего пользователя&#10;Класс DBHandler теперь статический" />
     <MESSAGE value="Продолжил разрабатывать дерево диалога" />
     <MESSAGE value="Изменил структуру таблицы shop&#10;Добавил методы для создания пользователя" />
-    <option name="LAST_COMMIT_MESSAGE" value="Изменил структуру таблицы shop&#10;Добавил методы для создания пользователя" />
+    <MESSAGE value="Класс Config теперь статический, &#10;поменял его конструктор на метод инициализации&#10;Добавил методы для проверки &#10;и обновления баланса пользователя" />
+    <option name="LAST_COMMIT_MESSAGE" value="Класс Config теперь статический, &#10;поменял его конструктор на метод инициализации&#10;Добавил методы для проверки &#10;и обновления баланса пользователя" />
   </component>
 </project>
