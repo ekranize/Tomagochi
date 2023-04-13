@@ -1,4 +1,5 @@
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -38,7 +39,7 @@ public class Game {
                     case "0" -> choosePlayer();
                     case "1" -> choosePet();
                     //case "2" -> createPet();
-                    //case "3" -> checkBalance();
+                    case "3" -> checkBalance();
                     //case "4" -> showInventory();
                     //case "5" -> shopMenu();
                 }
@@ -92,6 +93,7 @@ public class Game {
         whereIAm = "createPlayer1";
         System.out.println("Введите имя нового пользователя или \"0\" для возврата:");
     }
+    //Метод для собственно создания нового пользователя
     private static void createPlayer2(String newUserName) {
         whereIAm = "createPlayer2";
         try {
@@ -110,11 +112,13 @@ public class Game {
         System.out.println("Меню пользователя: " + currentUser);
         System.out.println("1) Выбрать питомца");
         System.out.println("2) Создать питомца");
-        System.out.println("3) Проверить баланс");
+        System.out.println("3) Проверить баланс счета");
         System.out.println("4) Проверить инвентарь");
         System.out.println("5) Сходить в магазин");
         System.out.println("0) Назад");
     }
+    //Метод для вывода всех принадлежащих пользователю
+    //питомцев для выбора питомца
     private static void choosePet () {
         whereIAm = "choosePet";
         System.out.println("Выберите Вашего питомца, " + currentUser + ":");
@@ -140,5 +144,18 @@ public class Game {
             }
             userMenu();
         }
+    }
+    //Метод для проверки баланса и его обновления
+    private static void checkBalance() {
+        whereIAm = "checkBalance";
+        try {
+            long newBalance = DBHandler.checkBalance(currentUser);
+            if (newBalance != -1) System.out.println("Баланс счета пользователя " + currentUser + " - " + newBalance);
+            else System.out.println("Ошибка проверки баланса счета");
+        } catch (SQLException | ParseException e) {
+            System.out.println("Что-то пошло не так, возникла ошибка!");
+            e.printStackTrace();
+        }
+        userMenu();
     }
 }

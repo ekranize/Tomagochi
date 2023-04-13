@@ -1,8 +1,10 @@
 import org.sqlite.JDBC;
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-
+import java.util.Date;
 public final class DBHandler {
     private static final String CON_STR = "jdbc:sqlite:db.db"; // Константа, в которой хранится адрес подключения
     private static Statement statement;
@@ -56,6 +58,21 @@ public final class DBHandler {
             userList.add(resultSet.getString("name"));
         }
         return userList;
+    }
+    //Метод для запроса баланса и его изменения
+    public static long checkBalance(String userName) throws SQLException, ParseException {
+        long balance, newBalance;
+        Date dateNow = new Date();
+        Date lastBalanceIncrTime;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        resultSet = statement.executeQuery("SELECT balance,lastBalanceIncrTime FROM users WHERE name=\"" + userName + "\"");
+        resultSet.next();
+        balance = resultSet.getInt("balance");
+        lastBalanceIncrTime = sdf.parse(resultSet.getString("lastBalanceIncrTime"));
+        long dateDiff = Math.abs(dateNow.getTime() - lastBalanceIncrTime.getTime()) / 1000;
+        newBalance = balance + dateDiff/Config.getBalanceIncrSpeed();
+        if (statement.executeUpdate("UPDATE users SET balance=" + newBalance + ", lastBalanceIncrTime=datetime('now','localtime') WHERE name=\"" + userName + "\"") != 1) return  -1;
+        return newBalance;
     }
     //Метод создает нового пользователя
     public static boolean createPlayer (String newUserName) throws SQLException {

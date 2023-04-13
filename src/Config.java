@@ -2,19 +2,19 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 //конфигуратор игры
-public final class Config {
-    private final int balanceIncrSpeed; //скорость увеличения баланса, сек./+1
-    private final int startBalance; //стартовый баланс для нового игрока
-    private final int eatDecrSpeed; //скорость уменьшения "сытости", сек./-1
-    private final int drinkDecrSpeed; //скорость уменьшения "воды", сек./-1
-    private final int washDecrSpeed; //скорость уменьшения "чистоты", сек./-1
-    private final int playDecrSpeed; //скорость уменьшения "настроения", сек./-1
-    private final int washingIncrCount; //количество "чистоты", приобретаемое мытьем
-    private final int playingIncrCount; //количество "настроения", приобретаемое игрой
-    private final int maximumBalance; //максимальный баланс для игрока
+public class Config {
+    private static int balanceIncrSpeed; //скорость увеличения баланса, сек./+1
+    private static int startBalance; //стартовый баланс для нового игрока
+    private static int eatDecrSpeed; //скорость уменьшения "сытости", сек./-1
+    private static int drinkDecrSpeed; //скорость уменьшения "воды", сек./-1
+    private static int washDecrSpeed; //скорость уменьшения "чистоты", сек./-1
+    private static int playDecrSpeed; //скорость уменьшения "настроения", сек./-1
+    private static int washingIncrCount; //количество "чистоты", приобретаемое мытьем
+    private static int playingIncrCount; //количество "настроения", приобретаемое игрой
+    private static int maximumBalance; //максимальный баланс для игрока
 
-    //Конструктор конфигуратора
-    public Config () {
+    //Инициализация конфигуратора
+    public static void init () {
         HashMap<String, String> configMap = null;
         try {
             DBHandler.init();
@@ -26,43 +26,43 @@ public final class Config {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
-        this.balanceIncrSpeed = Integer.parseInt(configMap.get("balanceIncrSpeed"));
-        this.startBalance = Integer.parseInt(configMap.get("startBalance"));
-        this.eatDecrSpeed = Integer.parseInt(configMap.get("eatDecrSpeed"));
-        this.drinkDecrSpeed = Integer.parseInt(configMap.get("drinkDecrSpeed"));
-        this.washDecrSpeed = Integer.parseInt(configMap.get("washDecrSpeed"));
-        this.playDecrSpeed = Integer.parseInt(configMap.get("playDecrSpeed"));
-        this.washingIncrCount = Integer.parseInt(configMap.get("washingIncrCount"));
-        this.playingIncrCount = Integer.parseInt(configMap.get("playingIncrCount"));
-        this.maximumBalance = Integer.parseInt(configMap.get("maximumBalance"));
+        balanceIncrSpeed = Integer.parseInt(configMap.get("balanceIncrSpeed"));
+        startBalance = Integer.parseInt(configMap.get("startBalance"));
+        eatDecrSpeed = Integer.parseInt(configMap.get("eatDecrSpeed"));
+        drinkDecrSpeed = Integer.parseInt(configMap.get("drinkDecrSpeed"));
+        washDecrSpeed = Integer.parseInt(configMap.get("washDecrSpeed"));
+        playDecrSpeed = Integer.parseInt(configMap.get("playDecrSpeed"));
+        washingIncrCount = Integer.parseInt(configMap.get("washingIncrCount"));
+        playingIncrCount = Integer.parseInt(configMap.get("playingIncrCount"));
+        maximumBalance = Integer.parseInt(configMap.get("maximumBalance"));
     }
 
     //Геттеры
-    public int getBalanceIncrSpeed() {
+    public static int getBalanceIncrSpeed() {
         return balanceIncrSpeed;
     }
-    public int getStartBalance() {
+    public static int getStartBalance() {
         return startBalance;
     }
-    public int getEatDecrSpeed() {
+    public static int getEatDecrSpeed() {
         return eatDecrSpeed;
     }
-    public int getDrinkDecrSpeed() {
+    public static int getDrinkDecrSpeed() {
         return drinkDecrSpeed;
     }
-    public int getWashDecrSpeed() {
+    public static int getWashDecrSpeed() {
         return washDecrSpeed;
     }
-    public int getPlayDecrSpeed() {
+    public static int getPlayDecrSpeed() {
         return playDecrSpeed;
     }
-    public int getWashingIncrCount() {
+    public static int getWashingIncrCount() {
         return washingIncrCount;
     }
-    public int getPlayingIncrCount() {
+    public static int getPlayingIncrCount() {
         return playingIncrCount;
     }
-    public int getMaximumBalance() {
+    public static int getMaximumBalance() {
         return maximumBalance;
     }
 }
