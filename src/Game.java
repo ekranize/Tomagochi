@@ -16,7 +16,7 @@ public class Game {
             case "login" -> {
                 switch (choice) {
                     case "1" -> choosePlayer();
-                    //case 2 -> createPlayer();
+                    case "2" -> createPlayer1();
                     case "3" -> System.exit(0);
                 }
             }
@@ -25,6 +25,12 @@ public class Game {
                 switch (choice) {
                     case "0" -> login();
                     default -> userMenu();
+                }
+            }
+            case "createPlayer1" -> {
+                switch (choice) {
+                    case "0" -> login();
+                    default -> createPlayer2(choice);
                 }
             }
             case "userMenu" -> {
@@ -81,8 +87,24 @@ public class Game {
             login();
         }
     }
+    //Метод для запроса имени нового пользователя
+    private static void createPlayer1() {
+        whereIAm = "createPlayer1";
+        System.out.println("Введите имя нового пользователя или \"0\" для возврата:");
+    }
+    private static void createPlayer2(String newUserName) {
+        whereIAm = "createPlayer2";
+        try {
+            if (DBHandler.createPlayer(newUserName))
+            System.out.println("Пользователь " + newUserName + " создан.");
+            Thread.sleep(2000);
+        } catch (SQLException | InterruptedException e) {
+            System.out.println("Что-то пошло не так, возникла ошибка!");
+            e.printStackTrace();
+        }
+        login();
+    }
     //Метод вывода меню пользователя
-    //Метод первичного запуска авторизации
     public static void userMenu() {
         whereIAm = "userMenu";
         System.out.println("Меню пользователя: " + currentUser);

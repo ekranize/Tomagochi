@@ -57,6 +57,10 @@ public final class DBHandler {
         }
         return userList;
     }
+    //Метод создает нового пользователя
+    public static boolean createPlayer (String newUserName) throws SQLException {
+        return statement.executeUpdate("INSERT INTO users (name) VALUES (\"" + newUserName + "\")") == 1;
+    }
     //Метод возвращает список всех питомцев из таблицы pets, принадлежащих выбранному пользователю
     public static ArrayList<String> getPetList(String userName)  throws SQLException {
         ArrayList<String> petList = new ArrayList<>();
