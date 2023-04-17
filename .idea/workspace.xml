@@ -31,16 +31,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "D:/!DATABASE/05 - ПРОЕКТЫ/JAVA/sqlite-jdbc-3.40.1.0.jar",
-    "project.structure.last.edited": "Global Libraries",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/!DATABASE/05 - ПРОЕКТЫ/JAVA/sqlite-jdbc-3.40.1.0.jar&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Global Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Application.Main">
     <configuration name="Main (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
@@ -145,7 +145,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681411411989</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Добавил методы для создания питомца">
+      <created>1681413800021</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1681413800021</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -156,6 +163,7 @@
     <MESSAGE value="Продолжил разрабатывать дерево диалога" />
     <MESSAGE value="Изменил структуру таблицы shop&#10;Добавил методы для создания пользователя" />
     <MESSAGE value="Класс Config теперь статический, &#10;поменял его конструктор на метод инициализации&#10;Добавил методы для проверки &#10;и обновления баланса пользователя" />
-    <option name="LAST_COMMIT_MESSAGE" value="Класс Config теперь статический, &#10;поменял его конструктор на метод инициализации&#10;Добавил методы для проверки &#10;и обновления баланса пользователя" />
+    <MESSAGE value="Добавил методы для создания питомца" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавил методы для создания питомца" />
   </component>
 </project>

@@ -1,7 +1,6 @@
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 public class Game {
@@ -11,6 +10,8 @@ public class Game {
     private static ArrayList<String> pets = new ArrayList<>(); //список всех питомцев текущего пользователя
     private static ArrayList<String> eats = new ArrayList<>(); //список всех продуктов питания
     private static ArrayList<String> drinks = new ArrayList<>(); //список всех напитков
+    private static ArrayList<String> shopGoods = new ArrayList<>(); //список товаров в магазине
+    private static ArrayList<String> shopGood = new ArrayList<>(); //параметры текущего товара в магазине
     private static String currentUser; //Текущий пользователь
     private static String currentPet; //Текущий питомец
     private static String newPetName; //Имя нового питомца
@@ -28,16 +29,12 @@ public class Game {
             }
             case "choosePlayer" -> {
                 currentUser = choiceHashMap.get(choice);
-                switch (choice) {
-                    case "0" -> login();
-                    default -> userMenu();
-                }
+                if ("0".equals(choice)) login();
+                else userMenu();
             }
             case "createPlayer1" -> {
-                switch (choice) {
-                    case "0" -> login();
-                    default -> createPlayer2(choice);
-                }
+                if ("0".equals(choice)) login();
+                else createPlayer2(choice);
             }
             case "userMenu" -> {
                 switch (choice) {
@@ -46,36 +43,32 @@ public class Game {
                     case "2" -> createPet1();
                     case "3" -> checkBalance();
                     //case "4" -> showInventory();
-                    //case "5" -> shopMenu();
+                    case "5" -> shopMenu();
                 }
             }
             case "choosePet" -> {
                 currentPet = choiceHashMap.get(choice);
-                switch (choice) {
-                    case "0" -> userMenu();
-                    //default -> petMenu();
-                }
+                if ("0".equals(choice)) userMenu();
+                //else petMenu();
             }
             case "createPet1" -> {
                 newPetName = choice;
-                switch (choice) {
-                    case "0" -> userMenu();
-                    default -> createPet2();
-                }
+                if ("0".equals(choice)) userMenu();
+                else createPet2();
             }
             case "createPet2" -> {
                 newPetEat = choiceHashMap.get(choice);
-                switch (choice) {
-                    case "0" -> createPet1();
-                    default -> createPet3();
-                }
+                if ("0".equals(choice)) createPet1();
+                else createPet3();
             }
             case "createPet3" -> {
                 newPetDrink = choiceHashMap.get(choice);
-                switch (choice) {
-                    case "0" -> createPet2();
-                    default -> createPet4();
-                }
+                if ("0".equals(choice)) createPet2();
+                else createPet4();
+            }
+            case "shopMenu" -> {
+                if ("0".equals(choice)) userMenu();
+                else shopMenu(choiceHashMap.get(choice));
             }
         }
     }
@@ -124,7 +117,7 @@ public class Game {
         whereIAm = "createPlayer2";
         try {
             if (DBHandler.createPlayer(newUserName))
-            System.out.println("Пользователь " + newUserName + " создан.");
+                System.out.println("Пользователь " + newUserName + " создан.");
             Thread.sleep(2000);
         } catch (SQLException | InterruptedException e) {
             System.out.println("Что-то пошло не так, возникла ошибка!");
@@ -255,5 +248,92 @@ public class Game {
             e.printStackTrace();
         }
         userMenu();
+    }
+    //Метод для вывода баланса и всех товаров в магазине
+    private static void shopMenu () {
+        whereIAm = "shopMenu";
+        try {
+            System.out.println("Баланс счета " + currentUser + ": " + DBHandler.checkBalance(currentUser));
+        } catch (SQLException | ParseException e) {
+            System.out.println("Что-то пошло не так, возникла ошибка!");
+            e.printStackTrace();
+        }
+        System.out.println("Список товаров в магазине:");
+        try {
+            shopGoods = DBHandler.getShopGoods();
+        } catch (SQLException e) {
+            System.out.println("Что-то пошло не так, возникла ошибка!");
+            e.printStackTrace();
+        }
+        if (!shopGoods.isEmpty()) {
+            for (int i = 0; i < shopGoods.size(); i++) {
+                try {
+                    shopGood = DBHandler.getGoodParams(shopGoods.get(i));
+                } catch (SQLException e) {
+                    System.out.println("Что-то пошло не так, возникла ошибка!");
+                    e.printStackTrace();
+                }
+                System.out.printf("%-3s %-15s %-10s %-10s %-10s", i + 1 + ") ", shopGoods.get(i), shopGood.get(0), shopGood.get(1), shopGood.get(2));
+                System.out.println();
+                choiceHashMap.put(Integer.toString(i + 1), shopGoods.get(i));
+            }
+            System.out.println("0) Назад");
+        } else {
+            System.out.println("ОШИБКА! В БД отсутствуют записи о товарах");
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                System.out.println("Что-то пошло не так, возникла ошибка!");
+                e.printStackTrace();
+            }
+            userMenu();
+        }
+    }
+    //Метод для вывода баланса и всех товаров в магазине
+    private static void shopMenu (String selectedGood) {
+        whereIAm = "shopMenu";
+        try {
+            if (DBHandler.buyGood(selectedGood, currentUser)) System.out.println(selectedGood + " успешно куплен!");
+            else System.out.println(selectedGood + " не куплен!");
+        } catch (SQLException e) {
+            System.out.println("Что-то пошло не так, возникла ошибка!");
+            e.printStackTrace();
+        }
+        try {
+            System.out.println("Баланс счета " + currentUser + ": " + DBHandler.checkBalance(currentUser));
+        } catch (SQLException | ParseException e) {
+            System.out.println("Что-то пошло не так, возникла ошибка!");
+            e.printStackTrace();
+        }
+        System.out.println("Список товаров в магазине:");
+        try {
+            shopGoods = DBHandler.getShopGoods();
+        } catch (SQLException e) {
+            System.out.println("Что-то пошло не так, возникла ошибка!");
+            e.printStackTrace();
+        }
+        if (!shopGoods.isEmpty()) {
+            for (int i = 0; i < shopGoods.size(); i++) {
+                try {
+                    shopGood = DBHandler.getGoodParams(shopGoods.get(i));
+                } catch (SQLException e) {
+                    System.out.println("Что-то пошло не так, возникла ошибка!");
+                    e.printStackTrace();
+                }
+                System.out.printf("%-3s %-15s %-10s %-10s %-10s", i + 1 + ") ", shopGoods.get(i), shopGood.get(0), shopGood.get(1), shopGood.get(2));
+                System.out.println();
+                choiceHashMap.put(Integer.toString(i + 1), shopGoods.get(i));
+            }
+            System.out.println("0) Назад");
+        } else {
+            System.out.println("ОШИБКА! В БД отсутствуют записи о товарах");
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                System.out.println("Что-то пошло не так, возникла ошибка!");
+                e.printStackTrace();
+            }
+            userMenu();
+        }
     }
 }

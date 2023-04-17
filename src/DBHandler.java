@@ -8,12 +8,15 @@ import java.util.Date;
 public final class DBHandler {
     private static final String CON_STR = "jdbc:sqlite:db.db"; // Константа, в которой хранится адрес подключения
     private static Statement statement;
+    private static Statement statement2;
     private static ResultSet resultSet;
-    private static Connection connection; // Объект, в котором будет храниться соединение с БД
+    private static ResultSet resultSet2;
     public static void init() throws SQLException {
         DriverManager.registerDriver(new JDBC());  // Регистрируем драйвер, с которым будем работать (Sqlite)
-        connection = DriverManager.getConnection(CON_STR); // Выполняем подключение к базе данных
+        // Объект, в котором будет храниться соединение с БД
+        Connection connection = DriverManager.getConnection(CON_STR); // Выполняем подключение к базе данных
         statement = connection.createStatement();
+        statement2 = connection.createStatement();
     }
     /*public void connectionClose () throws SQLException {
         if (connection != null && !connection.isClosed()) {
@@ -108,6 +111,42 @@ public final class DBHandler {
     //Метод создает нового питомца
     public static boolean createPet (String newPetName, String newPetEat, String newPetDrink, String userName) throws SQLException {
         return statement.executeUpdate("INSERT INTO pets (name, favEat, favDrink, userName) VALUES (\"" + newPetName + "\", \"" + newPetEat + "\", \"" + newPetDrink + "\", \"" + userName + "\")") == 1;
+    }
+    //Метод возвращает список всех товаров из таблицы shop
+    public static ArrayList<String> getShopGoods()  throws SQLException {
+        ArrayList<String> goodsList = new ArrayList<>();
+        resultSet = statement.executeQuery("SELECT object FROM shop");
+        while (resultSet.next()) {
+            goodsList.add(resultSet.getString("object"));
+        }
+        return goodsList;
+    }
+    //Метод возвращает параметры товара из таблицы shop
+    public static ArrayList<String> getGoodParams(String good)  throws SQLException {
+        ArrayList<String> goodParams = new ArrayList<>();
+        resultSet = statement.executeQuery("SELECT * FROM shop WHERE object=\"" + good + "\"");
+        while (resultSet.next()) {
+            goodParams.add(resultSet.getString("type"));
+            goodParams.add("+ " + resultSet.getString("incrCount"));
+            goodParams.add(resultSet.getString("price") + " руб.");
+        }
+        return goodParams;
+    }
+    //Метод обрабатывает покупку товара
+    public static boolean buyGood (String good, String userName) throws SQLException {
+        resultSet = statement.executeQuery("SELECT count FROM inventory WHERE object=\"" + good + "\" AND userName=\"" + userName + "\"");
+        resultSet2 = statement2.executeQuery("SELECT price FROM shop WHERE object=\"" + good + "\"");
+        resultSet2.next(); int price = resultSet2.getInt("price");
+        if (resultSet.next()) {
+            int count = resultSet.getInt("count"); count++;
+            if (statement.executeUpdate("UPDATE inventory SET count=\"" + count + "\" WHERE object=\"" + good + "\" AND userName=\"" + userName + "\"") == 1) {
+                return statement.executeUpdate("UPDATE users SET balance=balance-" + price + " WHERE name=\"" + userName + "\"") == 1;
+            }
+        } else
+        if (statement.executeUpdate("INSERT INTO inventory (userName, object) VALUES (\"" + userName + "\", \"" + good + "\")") == 1) {
+            return statement.executeUpdate("UPDATE users SET balance=balance-" + price + " WHERE name=\"" + userName + "\"") == 1;
+        }
+        return false;
     }
     /*public boolean checkAuth (String userName, String passwordHash) throws SQLException {
         statement = connection.createStatement();
