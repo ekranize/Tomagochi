@@ -148,6 +148,30 @@ public final class DBHandler {
         }
         return false;
     }
+
+
+
+    //Метод возвращает список всех товаров из таблицы shop
+    public static ArrayList<String> getInventoryGoods(String userName)  throws SQLException {
+        ArrayList<String> goodsList = new ArrayList<>();
+        resultSet = statement.executeQuery("SELECT object FROM inventory");
+        while (resultSet.next()) {
+            goodsList.add(resultSet.getString("object"));
+        }
+        return goodsList;
+    }
+    //Метод возвращает параметры товара из таблицы shop
+    public static ArrayList<String> getInventoryGoodParams(String good, String userName)  throws SQLException {
+        ArrayList<String> goodParams = new ArrayList<>();
+        resultSet = statement.executeQuery("SELECT * FROM shop WHERE object=\"" + good + "\"");
+        resultSet2 = statement2.executeQuery("SELECT count FROM inventory WHERE object=\"" + good + "\" AND userName=\"" + userName + "\"");
+        while (resultSet.next()) {
+            goodParams.add(resultSet.getString("type"));
+            goodParams.add("+ " + resultSet.getString("incrCount"));
+            goodParams.add(resultSet2.getString("count") + " шт.");
+        }
+        return goodParams;
+    }
     /*public boolean checkAuth (String userName, String passwordHash) throws SQLException {
         statement = connection.createStatement();
         resultSet = statement.executeQuery("SELECT COUNT(*) AS recordCount FROM users WHERE userName = '" + userName + "' AND password = '" + passwordHash + "'");

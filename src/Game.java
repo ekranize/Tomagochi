@@ -12,6 +12,8 @@ public class Game {
     private static ArrayList<String> drinks = new ArrayList<>(); //список всех напитков
     private static ArrayList<String> shopGoods = new ArrayList<>(); //список товаров в магазине
     private static ArrayList<String> shopGood = new ArrayList<>(); //параметры текущего товара в магазине
+    private static ArrayList<String> inventoryGoods = new ArrayList<>(); //список товаров в инвентаре
+    private static ArrayList<String> inventoryGood = new ArrayList<>(); //параметры текущего товара в инвентаре
     private static String currentUser; //Текущий пользователь
     private static String currentPet; //Текущий питомец
     private static String newPetName; //Имя нового питомца
@@ -42,7 +44,7 @@ public class Game {
                     case "1" -> choosePet();
                     case "2" -> createPet1();
                     case "3" -> checkBalance();
-                    //case "4" -> showInventory();
+                    case "4" -> showInventory();
                     case "5" -> shopMenu();
                 }
             }
@@ -69,6 +71,9 @@ public class Game {
             case "shopMenu" -> {
                 if ("0".equals(choice)) userMenu();
                 else shopMenu(choiceHashMap.get(choice));
+            }
+            case "showInventory" -> {
+                if ("0".equals(choice)) userMenu();
             }
         }
     }
@@ -327,6 +332,39 @@ public class Game {
             System.out.println("0) Назад");
         } else {
             System.out.println("ОШИБКА! В БД отсутствуют записи о товарах");
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                System.out.println("Что-то пошло не так, возникла ошибка!");
+                e.printStackTrace();
+            }
+            userMenu();
+        }
+    }
+    //Метод для вывода всех товаров в инвентаре пользователя
+    private static void showInventory () {
+        whereIAm = "showInventory";
+        System.out.println("Список товаров в инвентаре пользователя " + currentUser + ":");
+        try {
+            inventoryGoods = DBHandler.getInventoryGoods(currentUser);
+        } catch (SQLException e) {
+            System.out.println("Что-то пошло не так, возникла ошибка!");
+            e.printStackTrace();
+        }
+        if (!inventoryGoods.isEmpty()) {
+            for (int i = 0; i < inventoryGoods.size(); i++) {
+                try {
+                    inventoryGood = DBHandler.getInventoryGoodParams(inventoryGoods.get(i), currentUser);
+                } catch (SQLException e) {
+                    System.out.println("Что-то пошло не так, возникла ошибка!");
+                    e.printStackTrace();
+                }
+                System.out.printf("%-3s %-15s %-10s %-10s %-5s", i + 1 + ") ", inventoryGoods.get(i), inventoryGood.get(0), inventoryGood.get(1), inventoryGood.get(2));
+                System.out.println();
+            }
+            System.out.println("0) Назад");
+        } else {
+            System.out.println("ОШИБКА! В БД отсутствуют записи о товарах в инвентаре");
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
