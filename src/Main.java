@@ -108,7 +108,7 @@ public class Main {
             case "choosePet" -> {
                 currentUser.setCurrentPet(currentUser.getPets().get(Integer.parseInt(choice)));
                 if (choice.equals("0")) userMenu();
-                //else petMenu();
+                else petMenu();
             }
             case "createPet1" -> {
                 newPetParams.put("name", choice);
@@ -132,6 +132,16 @@ public class Main {
             case "showInventory" -> {
                 if (choice.equals("0")) userMenu();
             }
+            case "petMenu" -> {
+                switch (choice) {
+                    case "0" -> choosePet();
+                    //case "1" -> eatPet();
+                    //case "2" -> drinkPet();
+                    //case "3" -> washPet();
+                    //case "4" -> playPet();
+                    //case "5" -> useInventory(0);
+                }
+            }
         }
     }
     //Метод выбора игрока при авторизации
@@ -144,7 +154,7 @@ public class Main {
             }
             System.out.println("0) Назад");
         } else {
-            System.out.println("ОШИБКА! В БД отсутствуют записи о пользователях");
+            System.out.println("Отсутствуют записи о пользователях");
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
@@ -168,7 +178,7 @@ public class Main {
     public static void checkBalance() {
         whereIAm = "checkBalance";
         long newBalance = DBHandler.checkBalance(currentUser.getName());
-        if (newBalance != -1) System.out.println("Баланс счета пользователя " + currentUser.getName() + " - " + newBalance);
+        if (newBalance != -1) System.out.println("Баланс счета пользователя " + currentUser.getName() + " - " + newBalance + " руб.");
         else System.out.println("Ошибка проверки баланса счета");
         userMenu();
     }
@@ -183,7 +193,7 @@ public class Main {
             }
             System.out.println("0) Назад");
         } else {
-            System.out.println("ОШИБКА Main.choosePet. Отсутствуют записи о питомцах");
+            System.out.println("Отсутствуют записи о питомцах");
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
@@ -227,7 +237,7 @@ public class Main {
             }
             System.out.println("0) Назад");
         } else {
-            System.out.println("ОШИБКА Main.createPet2. Отсутствуют записи о еде");
+            System.out.println("Отсутствуют записи о еде");
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
@@ -246,7 +256,7 @@ public class Main {
             }
             System.out.println("0) Назад");
         } else {
-            System.out.println("ОШИБКА Main.createPet2. Отсутствуют записи о напитках");
+            System.out.println("Отсутствуют записи о напитках");
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
@@ -281,7 +291,7 @@ public class Main {
             currentUser.addGood(newGood, newCount);
             System.out.println(newGood.getObject() + " успешно куплен!");
         }
-        System.out.println("Баланс счета " + currentUser.getName() + ": " + DBHandler.checkBalance(currentUser.getName()));
+        System.out.println("Баланс счета " + currentUser.getName() + ": " + DBHandler.checkBalance(currentUser.getName()) + " руб.");
         System.out.println("Список товаров в магазине:");
         System.out.println("Еда:");
         if (eats != null && !eats.isEmpty()) {
@@ -324,7 +334,7 @@ public class Main {
             }
             System.out.println("0) Назад");
         } else {
-            System.out.println("ОШИБКА Main.showInventory. Отсутствуют записи об инвентаре пользователя");
+            System.out.println("Отсутствуют записи об инвентаре пользователя");
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
@@ -333,7 +343,21 @@ public class Main {
             userMenu();
         }
     }
-
+    //Метод вывода меню питомца
+    public static void petMenu() {
+        whereIAm = "petMenu";
+        System.out.println("Меню питомца: " + currentUser.getCurrentPet().getName() + " пользователя " + currentUser.getName());
+        System.out.println("Уровень сытости: " + DBHandler.getLevel(currentUser.getName(), currentUser.getCurrentPet().getName(), "Eat") + "%");
+        System.out.println("Уровень воды: " + DBHandler.getLevel(currentUser.getName(), currentUser.getCurrentPet().getName(), "Drink") + "%");
+        System.out.println("Уровень чистоты: " + DBHandler.getLevel(currentUser.getName(), currentUser.getCurrentPet().getName(), "Wash") + "%");
+        System.out.println("Уровень настроения: " + DBHandler.getLevel(currentUser.getName(), currentUser.getCurrentPet().getName(), "Play") + "%");
+        System.out.println("1) Покормить питомца");
+        System.out.println("2) Напоить питомца");
+        System.out.println("3) Помыть питомца");
+        System.out.println("4) Поиграть с питомцем");
+        System.out.println("5) Применить предмет из инвентаря");
+        System.out.println("0) Назад");
+    }
     public static int getBalanceIncrSpeed() {
         return balanceIncrSpeed;
     }

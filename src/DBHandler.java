@@ -204,4 +204,32 @@ public final class DBHandler {
         }
         return newCount;
     }
+    //Метод для запроса уровня сытости и его изменения
+    public static long getLevel(String userName, String petName, String type) {
+        long level, newLevel = 0L;
+        Date dateNow = new Date();
+        Date lastTime;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            resultSet = statement.executeQuery("SELECT " + type + "Level,last" + type + "Time FROM pets WHERE name=\"" + petName + "\" AND userName=\"" + userName + "\"");
+            resultSet.next();
+            level = resultSet.getInt(type + "Level");
+            lastTime = sdf.parse(resultSet.getString("last" + type + "Time"));
+            long dateDiff = Math.abs(dateNow.getTime() - lastTime.getTime()) / 1000;
+            int speed = 0;
+            switch (type) {
+                case "Eat" -> speed = Main.getEatDecrSpeed();
+                case "Drink" -> speed = Main.getDrinkDecrSpeed();
+                case "Wash" -> speed = Main.getWashDecrSpeed();
+                case "Play" -> speed = Main.getPlayDecrSpeed();
+            }
+            newLevel = level - dateDiff / speed;
+            if (newLevel < 0) newLevel = 0;
+            if (statement.executeUpdate("UPDATE pets SET " + type + "Level=" + newLevel + ", last" + type + "Time=datetime('now','localtime') WHERE name=\"" + petName + "\" AND userName=\"" + userName + "\"") != 1)
+                return -1;
+        } catch (SQLException | ParseException e) {
+            System.out.println("ОШИБКА DBHandler.getLevel");
+        }
+        return newLevel;
+    }
 }

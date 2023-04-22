@@ -5,7 +5,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.db" beforeDir="false" afterPath="$PROJECT_DIR$/db.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DBHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DBHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -166,7 +166,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681715810979</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Переработал проект, сделал его более ОО.&#10;Переместил всю инициализацию и игровые методы в Main, Config удалил. Добавил классы: User, Pet, Good для пользователя, питомца и товара соответственно. Начальная инициализация теперь берет всю информацию о пользователях, питомцах и товарах и создает для всего объекты, которые помещает в ХэшМапы">
+      <created>1682138355422</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1682138355422</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -180,6 +187,7 @@
     <MESSAGE value="Добавил методы для создания питомца" />
     <MESSAGE value="Добавил методы для магазина" />
     <MESSAGE value="Добавил методы для проверки инвентаря пользователя" />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавил методы для проверки инвентаря пользователя" />
+    <MESSAGE value="Переработал проект, сделал его более ОО.&#10;Переместил всю инициализацию и игровые методы в Main, Config удалил. Добавил классы: User, Pet, Good для пользователя, питомца и товара соответственно. Начальная инициализация теперь берет всю информацию о пользователях, питомцах и товарах и создает для всего объекты, которые помещает в ХэшМапы" />
+    <option name="LAST_COMMIT_MESSAGE" value="Переработал проект, сделал его более ОО.&#10;Переместил всю инициализацию и игровые методы в Main, Config удалил. Добавил классы: User, Pet, Good для пользователя, питомца и товара соответственно. Начальная инициализация теперь берет всю информацию о пользователях, питомцах и товарах и создает для всего объекты, которые помещает в ХэшМапы" />
   </component>
 </project>
