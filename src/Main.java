@@ -116,12 +116,12 @@ public class Main {
                 else createPet2();
             }
             case "createPet2" -> {
-                newPetParams.put("eat", choice);
+                newPetParams.put("eat", eats.get(Integer.parseInt(choice)).getObject());
                 if (choice.equals("0")) createPet1();
                 else  createPet3();
             }
             case "createPet3" -> {
-                newPetParams.put("drink", choice);
+                newPetParams.put("drink", drinks.get(Integer.parseInt(choice)).getObject());
                 if (choice.equals("0")) createPet2();
                 else createPet4();
             }
@@ -280,7 +280,8 @@ public class Main {
         } catch (InterruptedException e) {
                 System.out.println("ОШИБКА Main.createPet4");
         }
-        userMenu();
+        currentUser.setCurrentPet(newPet);
+        petMenu();
     }
     //Метод для вывода баланса и всех товаров в магазине
     private static void shopMenu (int buyNum) {
